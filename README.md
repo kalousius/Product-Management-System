@@ -1,6 +1,6 @@
 # Product-Management-System
 The project aims to create a simple product management system where users can perform CRUD (Create, Read, Update, Delete) operations on products.
-Key Features:
+#Key Features:
 
 View Products: Users can view a list of products with their details such as name, quantity, price, and description.
 
@@ -10,7 +10,7 @@ Edit Product: Users can edit existing product details, including name, quantity,
 
 Delete Product: Users can delete products from the system.
 
-Technologies Used:
+#Technologies Used:
 
 Laravel: Laravel is a PHP framework used for developing web applications. It provides a robust MVC architecture and various built-in features for web development.
 
@@ -18,7 +18,7 @@ MySQL: MySQL is a relational database management system used to store and manage
 
 HTML/CSS: HTML and CSS are used for creating the user interface and styling the web pages.
 
-Project Structure:
+#Project Structure:
 
 Models: Contains the Product model which interacts with the database.
 
@@ -26,7 +26,7 @@ Controllers: Contains ProductController which handles user requests, performs bu
 
 Views: Contains Blade templates for displaying HTML content to users.
 
-Workflow:
+#Workflow:
 
 User visits the application and views a list of products.
 
@@ -38,7 +38,7 @@ After submitting the form, the application processes the data and updates the da
 
 The updated list of products is displayed to the user.
 
-Benefits:
+#Benefits:
 
 Efficiency: Provides an efficient way to manage product data.
 
