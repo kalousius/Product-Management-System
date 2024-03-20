@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <style>
-        /* General styles */
+        /* Your custom CSS styles here */
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
@@ -58,47 +58,27 @@
             margin-bottom: 20px;
             font-size: 1.5rem;
         }
-
-        .dashboard-section table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .dashboard-section th, .dashboard-section td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .dashboard-section th {
-            background-color: #f2f2f2;
-        }
-
-        .dashboard-section .action-buttons {
-            display: flex;
-            gap: 5px;
-        }
-
         /* Form styles */
-        .dashboard-section form {
-            margin-top: 20px;
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .dashboard-section label {
+        .form-group label {
             display: block;
             margin-bottom: 5px;
         }
 
-        .dashboard-section input[type="text"],
-        .dashboard-section textarea {
+        .form-group input[type="text"],
+        .form-group textarea {
             width: 100%;
             padding: 8px;
-            margin-bottom: 10px;
+            margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box;
         }
 
-        .dashboard-section input[type="submit"] {
+        .form-group input[type="submit"] {
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
@@ -107,23 +87,57 @@
             cursor: pointer;
         }
 
-        .dashboard-section input[type="submit"]:hover {
+        .form-group input[type="submit"]:hover {
             background-color: #45a049;
         }
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Action buttons styles */
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-buttons a, .action-buttons button {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .action-buttons a:hover, .action-buttons button:hover {
+            background-color: #f0f0f0;
+        }
+
     </style>
 </head>
 <body>
     <ul class="menu">
-    <li><a href="{{ route('product.create') }}">Create Product</a></li>
-    <li><a href="{{ route('product.index') }}">View Products</a></li>
-    <li>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit">Logout</button>
-        </form>
-    </li>
+        <li><a href="{{ route('product.create') }}">Create Product</a></li>
+        <li><a href="{{ route('product.index') }}">View Products</a></li>
+        <li>
+    <form id="logout-form" method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
+</li>
 </ul>
-
 
     <div class="dashboard">
         <!-- Display list of products -->
@@ -163,28 +177,65 @@
             <h2>Create a Product</h2>
             <form method="POST" action="{{ route('product.store') }}">
                 @csrf 
-                <div>
-                    <label>Name</label>
-                    <input type="text" name="name" placeholder="Name" required>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Name" required>
                 </div>
-                <div>
-                    <label>Qty</label>
-                    <input type="text" name="qty" placeholder="Qty" required>
+                <div class="form-group">
+                    <label for="qty">Qty:</label>
+                    <input type="text" id="qty" name="qty" placeholder="Qty" required>
                 </div>
-                <div>
-                    <label>Price</label>
-                    <input type="text" name="price" placeholder="Price" required>
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="text" id="price" name="price" placeholder="Price" required>
                 </div>
-                <div>
-                    <label>Description</label>
-                    <textarea name="description" placeholder="Description" required></textarea>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" placeholder="Description" required></textarea>
                 </div>
-                <div>
+                <div class="form-group">
                     <!-- Submit button -->
                     <input type="submit" value="Save a New Product">
                 </div>
             </form>
         </div>
     </div>
+
+    <div class="chart-container">
+        <h2>Product Quantity Chart</h2>
+        <canvas id="productChart" width="600" height="300"></canvas>
+    </div>
+
+    <script>
+        // Fetch product data from the server
+        const products = {!! json_encode($products) !!};
+        
+        // Extract product names and quantities
+        const productNames = products.map(product => product.name);
+        const productQuantities = products.map(product => product.qty);
+        
+        // Render chart
+        const ctx = document.getElementById('productChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: productNames,
+                datasets: [{
+                    label: 'Product Quantities',
+                    data: productQuantities,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
