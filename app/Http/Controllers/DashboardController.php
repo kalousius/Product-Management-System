@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    /**
+     * Show the dashboard.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function showDashboard()
     {
         $products = Product::all();
-        return view('dashboard', ['products' => $products]);
+        $categories = Category::all();
+        
+        return view('dashboard', compact('products', 'categories'));
     }
 }

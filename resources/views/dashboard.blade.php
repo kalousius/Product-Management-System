@@ -130,8 +130,9 @@
 <body>
     <ul class="menu">
         <li><a href="{{ route('product.create') }}">Create Product</a></li>
-        <li><a href="{{ route('product.index') }}">View Products</a></li>
-        <li>
+    <li><a href="{{ route('product.index') }}">View Products</a></li>
+    <li><a href="{{ route('category.index') }}">Manage Categories</a></li>
+    <li>
     <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit">Logout</button>
@@ -200,42 +201,34 @@
             </form>
         </div>
     </div>
-
-    <div class="chart-container">
-        <h2>Product Quantity Chart</h2>
-        <canvas id="productChart" width="600" height="300"></canvas>
-    </div>
-
-    <script>
-        // Fetch product data from the server
-        const products = {!! json_encode($products) !!};
-        
-        // Extract product names and quantities
-        const productNames = products.map(product => product.name);
-        const productQuantities = products.map(product => product.qty);
-        
-        // Render chart
-        const ctx = document.getElementById('productChart').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: productNames,
-                datasets: [{
-                    label: 'Product Quantities',
-                    data: productQuantities,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+       <!--more information  -->  
+       <div class="dashboard-section">
+            <h2>Categories</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+                @foreach ($categories as $category)
+                <tr>
+                    <td>{{ $category->id }}</td>
+                    <td>{{ $category->name }}</td>
+                    <td>{{ $category->description }}</td>
+                    <td class="action-buttons">  
+                        <a href="{{ route('category.edit', $category->id) }}">Edit</a>
+                        <form method="POST" action="{{ route('category.destroy', $category->id) }}" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </table>
+        </div>
     </script>
+    
 </body>
 </html>
